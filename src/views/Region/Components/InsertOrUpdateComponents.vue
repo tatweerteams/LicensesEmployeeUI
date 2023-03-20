@@ -1,0 +1,208 @@
+<template>
+  <v-dialog v-model="dialog" max-width="600px" persistent>
+    <template v-slot:activator="{ on }">
+      <template>
+        <v-btn
+          color="#536DFE"
+          class="white--text "
+          @click="openDialog"
+          v-on="on"
+          elevation="5"
+        >
+          <v-icon class="ml-2">mdi-plus-circle</v-icon><span> إضافة منطقة</span>
+        </v-btn>
+      </template>
+    </template>
+    <v-card>
+      <v-card-title>
+        <span class="headline">{{ formTitle }}</span>
+      </v-card-title>
+
+      <v-divider></v-divider>
+
+      <v-card-text>
+        <v-container>
+          <v-form ref="formRegion" v-model="valid">
+            <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  prepend-icon="location_city"
+                  v-model="regionNo"
+                  label="رقم المنطقة"
+                  :rules="[
+                    validationInput.isEmpty,
+                    validationInput.numberOnly,
+                    validationInput.numberNotZero,
+                  ]"
+                  required
+                  maxLength="4"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  prepend-icon="location_city"
+                  v-model="regionName"
+                  label="إسم المنطقة"
+                  :rules="[
+                    validationInput.isEmpty,
+                    validationInput.isArabic,
+                    validationInput.currectInput,
+                    validationInput.minLength,
+                  ]"
+                  maxLength="30"
+                  required
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </v-form>
+        </v-container>
+      </v-card-text>
+
+      <v-card-actions>
+        <div style="width: 100%;text-align: center;">
+          <v-btn
+            @click="save"
+            :disabled="!valid"
+            class="mx-2 white--text"
+            color="#536DFE"
+          >
+            <v-icon>save</v-icon>
+            <span>حفظ البيانات</span>
+          </v-btn>
+          <v-btn @click="close" class="mx-2 white--text" color="#E91D62">
+            <v-icon style="font-size: 19px;" dark>clear</v-icon>
+            <span>إلغاء</span>
+          </v-btn>
+        </div>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+</template>
+
+<script>
+// import { EventBus } from "../../../eventBus.js";
+import { validationInput } from "../../../models/validationInput.js";
+import { mapActions } from "vuex";
+import { createHelpers } from "vuex-map-fields";
+const { mapFields } = createHelpers({
+  getterType: "getDataFields",
+  mutationType: "updateDataField",
+});
+export default {
+  name: "insert-Or-Update",
+  props: {
+    updateItemProp: {},
+    dialogProp: {},
+  },
+
+  data: () => ({
+    dialog: false,
+    valid: false,
+    validationInput: validationInput,
+  }),
+
+  computed: {
+    ...mapFields("regionStore", {
+      regionNo: "editedItem.regionNumber",
+      regionId: "editedItem.regionId",
+      regionName: "editedItem.regionName",
+    }),
+    formTitle() {
+      return !this.regionId ? "إضافة منطقة جديدة" : "تعديل بيانات المنطقة";
+    },
+  },
+
+  watch: {
+    dialogProp: {
+      handler(data) {
+        this.dialog = data;
+      },
+      immediate: true,
+    },
+
+    updateItemProp: {
+      handler(data) {
+        if (data) this.editSelected(data);
+      },
+      immediate: true,
+    },
+  },
+  methods: {
+    ...mapActions({
+      InsertRegionStore: "regionStore/InsertRegion",
+      // ClearDataItemStore: "regionStore/ClearDataItem",
+      UpdateRegionStore: "regionStore/UpdateRegion",
+      SetDataUpdateStore: "regionStore/SetDataUpdate",
+    }),
+    openDialog() {
+      this.dialog = true;
+    },
+
+    editSelected(item) {
+      // console.log(item)
+      this.SetDataUpdateStore(item);
+
+      // this.regionNo=item.regionNumber;
+      // this.regionId=item.regionId;
+      // this.regionName=item.regionName;
+      this.dialog = true;
+    },
+
+    close() {
+      this.dialog = false;
+      setTimeout(() => {
+        this.ClearDataItemStore();
+        this.resetValidation();
+      }, 300);
+      // this.$emit("close-Dialog-Update");
+      // EventBus.$emit("closeDialogUpdateRegion");
+    },
+
+    save() {
+      if (this.regionId) {
+        this.updateRegion();
+      } else {
+        
+        this.insertRegion();
+      }
+    },
+
+    insertRegion() {
+      this.$store.dispatch("loading", true);
+      this.InsertRegionStore()
+        .then((res) => {
+          this.notify(`${res}`, "#1d262d");
+          this.$emit("refresh-data");
+          this.close();
+        })
+        .catch((error) => {
+          this.notify(`${error}`, "#1d262d");
+          this.$store.dispatch("loading", false);
+        });
+    },
+    updateRegion() {
+      this.$store.dispatch("loading", true);
+      this.UpdateRegionStore()
+        .then((res) => {
+          this.notify(`${res}`, "#1d262d");
+          this.$emit("refresh-data");
+          this.close();
+        })
+        .catch((error) => {
+          this.notify(`${error}`, "#1d262d");
+          this.$store.dispatch("loading", false);
+        });
+    },
+
+    resetValidation() {
+      this.$refs.formRegion?.reset();
+    },
+
+    notify(text, color) {
+      this.$store.commit("showMessage", { text: text, color: color });
+    },
+  },
+};
+</script>
+
+<style></style>

@@ -1,0 +1,85 @@
+{
+    "name": "tatweer_send",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "serve": "vue-cli-service serve",
+        "build": "vue-cli-service build",
+        "lint": "vue-cli-service lint",
+        "instal": "npm install"
+    },
+    "dependencies": {
+        "@bachdgvn/vue-otp-input": "^1.0.8",
+        "apexcharts": "^3.22.2",
+        "async-validator": "^4.2.5",
+        "axios": "^1.1.2",
+        "chart.js": "^2.9.4",
+        "core-js": "^3.4.4",
+        "crypto-js": "^4.1.1",
+        "element-ui": "^2.15.10",
+        "html2pdf.js": "^0.10.1",
+        "js-cookie": "^2.2.1",
+        "jsprintmanager": "^5.0.2",
+        "material-design-icons-iconfont": "^5.0.1",
+        "print-js": "^1.6.0",
+        "v-idle": "^0.2.1",
+        "vue": "^2.7.12",
+        "vue-apexcharts": "^1.6.2",
+        "vue-cam": "^0.2.4",
+        "vue-capture": "^0.1.7",
+        "vue-chartjs": "^3.5.1",
+        "vue-circular-count-down-timer": "^2.0.0",
+        "vue-html-secure": "^1.0.10",
+        "vue-qr": "^3.2.4",
+        "vue-router": "^3.6.5",
+        "vue-session": "^1.0.0",
+        "vue-web-cam": "^1.9.0",
+        "vue-webcam": "^2.0.4",
+        "vuelidate": "^0.7.7",
+        "vuetify": "^2.6.11",
+        "vuex": "^3.6.2",
+        "vuex-map-fields": "^1.4.1",
+        "xlsx": "^0.18.5"
+    },
+    "devDependencies": {
+        "@fortawesome/fontawesome-free": "^5.12.1",
+        "@volar-plugins/vetur": "latest",
+        "@vue/cli-plugin-babel": "^5.0.8",
+        "@vue/cli-plugin-eslint": "^5.0.8",
+        "@vue/cli-plugin-pwa": "^5.0.8",
+        "@vue/cli-plugin-router": "^5.0.8",
+        "@vue/cli-plugin-vuex": "^5.0.8",
+        "@vue/cli-service": "^5.0.8",
+        "@vue/eslint-config-prettier": "^5.1.0",
+        "babel-eslint": "^10.0.3",
+        "eslint": "^7.32.0",
+        "eslint-plugin-prettier": "^3.1.1",
+        "eslint-plugin-vue": "^5.2.3",
+        "prettier": "^1.19.1",
+        "sass": "^1.23.7",
+        "sass-loader": "^8.0.0",
+        "vue-cli-plugin-vuetify": "^2.5.8",
+        "vue-template-compiler": "^2.7.12",
+        "vuetify-loader": "^1.9.2"
+    },
+    "eslintConfig": {
+        "root": true,
+        "env": {
+            "node": true
+        },
+        "extends": [
+            "plugin:vue/essential",
+            "@vue/prettier"
+        ],
+        "rules": {
+            "no-console": 0
+        },
+        "parserOptions": {
+            "parser": "babel-eslint"
+        }
+    },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions"
+    ]
+}

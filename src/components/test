@@ -1,0 +1,109 @@
+  <v-data-table
+        :headers="stateSupplyOrder==0?headerSupplyOrderDetailesCompleted:headerSupplyOrderDetailesUnCompleted"
+        :items="supplyOrderDetiles"
+        hide-default-footer
+        :disable-pagination="true"
+        class="elevation-5"
+       
+        >
+
+    <template v-slot:top >
+      <v-toolbar flat color="white">
+        <v-toolbar-title>{{supplyOrderName}}</v-toolbar-title>
+        <v-divider
+          class="mx-4"
+          inset
+          vertical
+        ></v-divider>
+          <v-spacer></v-spacer>
+        <v-dialog v-if="stateSupplyOrder==1" v-model="dialogProduct" persistent max-width="600px">
+           
+            <template  v-slot:activator="{ on }">
+                <template >
+                  <v-btn  color="primary"  outlined  class="mb-2" v-on="on">
+                    <v-icon>note_add</v-icon>  <span class="mr-2">إضافة منتج</span>
+                  </v-btn>
+                </template>
+            </template>
+
+
+          <v-card>
+         
+            <v-card-title>
+         
+              <span class="headline">{{ formTitle }}</span>
+            </v-card-title>
+
+            <v-card-text>
+              <v-container>
+
+                  <v-form
+                      ref="form"
+                      v-model="valid"
+                  >
+                      <v-row>
+                        <v-col cols="12" sm="12" md="12">
+                          <v-text-field
+                            v-model="editedItemSupplyOrder.note"
+                            label="بيان عملية التوريد"
+                            :rules="noteRules"
+                            required
+                            prepend-icon="airline_seat_flat"
+                            ></v-text-field>
+                        </v-col>
+
+                      </v-row>
+                    </v-form>
+
+              </v-container>
+            </v-card-text>
+            <v-card-actions >
+              <div style="width: 100%;text-align: center;">
+                   <v-btn outlined  class="ml-2" @click="closeDialogProduct"  color="primary" >
+                    <v-icon style="font-size: 19px;"  dark>clear</v-icon> <span> إلغاء </span> 
+                </v-btn>
+                <v-btn   @click="saveSupplyOrder" :disabled="!valid"  color="primary" >
+                  <v-icon   tyle="font-size: 19px; color:#fff">save</v-icon> <span> حفظ البيانات </span>
+                </v-btn>
+
+              </div>
+             
+               
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-toolbar>
+    </template>
+    
+    
+
+    <template  v-if="stateSupplyOrder==1" v-slot:item.actionUnCompleted="{ item }">
+      <div class="mb-1">
+        
+        <v-icon  @click="editItemOrderSupplyDialog(item)"   style="font-size: 19px;color:blue"  >edit</v-icon>  
+        <v-divider
+            class="mx-2"
+             inset
+            vertical
+          ></v-divider> 
+        <v-icon   @click="displayDeleteSupplyOrderDialog(item)"  style="font-size: 19px; color:red" dark>delete</v-icon> 
+      </div>
+    </template>
+
+
+    <template v-slot:no-data>
+      <v-btn color="primary" @click="getsupplyOrderDetiles()">عرض المنتجات</v-btn>
+    </template>
+  </v-data-table>
+
+  <!-- _  -->
+    <template class="mt-5" v-if="supplyOrderDetiles.length>0">
+      <div class="text-center mt-3">
+        <v-pagination 
+          v-model="pageSupplyOrderDetails"
+          :length="pageSizeSupplyOrderDetails"
+          circle
+          @input="searchDataSupplyOrderDetiles"
+        ></v-pagination>
+      </div>
+    </template>
